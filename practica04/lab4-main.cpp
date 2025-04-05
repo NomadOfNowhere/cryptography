@@ -83,7 +83,8 @@ void cipher() {
         
         case 3:
             cout << "Ingresa el mensaje codificar: ";
-            cin >> m;
+            cin.ignore(); 
+            getline(cin, m);
             cout << "El mensaje codificado en base64 es: " << base64Encode(m) << endl;
             break;
 
@@ -159,7 +160,6 @@ int main() {
         cout << "[3] Descifrar." << endl;
         cout << "[0] Salir." << endl;
 
-        
         cout << "Selecciona una opción: ";
         cin >> opc;
         cout << endl;
@@ -187,4 +187,6 @@ int main() {
 
     return 0;
 }
+
+
 

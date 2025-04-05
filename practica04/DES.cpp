@@ -31,12 +31,13 @@ string getDESRandomKey() {
 
     // Codificar la clave DES a Base64
     // ¡* Usando crypto++ *! CryptoPP::StringSource(key, key.size(), true, new CryptoPP::Base64Encoder(new CryptoPP::StringSink(encodedKey), false));
-    return base64Encode(stringKey);    
+    return base64Encode(stringKey);
 }
 
 void DESEncryptFile(string keyBase64) {
     string key = base64Decode(keyBase64), filename, plainText;
 
+    // Si la clave ingrsada es diferente del tamaño requerido de la llave
     if(key.size() != CryptoPP::DES::DEFAULT_KEYLENGTH) {
         cout << "¡Clave inválida!" << endl;
         return;
@@ -70,15 +71,23 @@ void DESEncryptFile(string keyBase64) {
                      new CryptoPP::StreamTransformationFilter(encryptor,
                                                     new CryptoPP::StringSink(cipherText)));   
     
+    // Generamos el nuevo nombre del archivo
+    string newName = filename.substr(0, filename.find_last_of('.')) + "$encrypted" + filename.substr(filename.find_last_of('.'));
+
+    // Renombrar el archivo
+    if (rename(filename.c_str(),newName.c_str()) == 0) {
+        cout << "Archivo cifrado con éxito como: " << newName << endl;
+    } else {
+        cout << "¡Error al renombrar el archivo!" << endl;
+        return;
+    }
+
     // Escribir en archivo
-    string fileExtension = filename.substr(filename.find('.')+1);
-    ofstream outputFile("encryptedFile."+fileExtension);
+    ofstream outputFile(newName);
     if(!outputFile) {
         cout << "¡No se pudo abrir el archivo! :(" << endl;
         return;
     }
-    cout << "Archivo guardado como: " << "encryptedFile."+fileExtension << endl;
-
     outputFile << base64Encode(cipherText);
     outputFile.close();
 }
@@ -120,16 +129,23 @@ void DESDecryptFile(string keyBase64) {
     CryptoPP::StringSource(cipherText, true,
                      new CryptoPP::StreamTransformationFilter(decryptor,
                                                     new CryptoPP::StringSink(text)));
-    
+
+    // Generar el nuevo nombre del archivo
+    string newName = filename.substr(0, filename.find_last_of('$')) + filename.substr(filename.find_last_of('.'));
+
+    // Renombrar el archivo
+    if (rename(filename.c_str(),newName.c_str()) == 0) {
+        cout << "Archivo descifrado con éxito como: " << newName << endl;
+    } else {
+        cout << "¡Error al renombrar el archivo!" << endl;
+        return;
+    }
     // Escribir en archivo
-    string fileExtension = filename.substr(filename.find('.')+1);
-    ofstream outputFile("decryptedFile."+fileExtension); // Abrir el archivo para escribir
+    ofstream outputFile(newName);
     if(!outputFile) {
         cout << "¡No se pudo abrir el archivo! :(" << endl;
         return;
     }
-
-    cout << "Archivo guardado como: " << "decryptedFile."+fileExtension << endl;
 
     outputFile << text << endl;
 }
