@@ -1,0 +1,6 @@
+* * * PRIME NUMBERS AND GENERATORS * * *
+[1] Random prime number with n bits.
+[2] RSA.
+[3] Generators: 
+Select an option: 
+Enter number of bits: 
