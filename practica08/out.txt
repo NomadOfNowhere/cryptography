@@ -3,4 +3,3 @@
 [2] RSA.
 [3] Generators: 
 Select an option: 
-Enter number of bits: 

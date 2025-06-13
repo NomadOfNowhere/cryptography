@@ -37,10 +37,39 @@ array<bigint, 3> RSA(int bits) {
     return {e, n, d};
 }
 
-bool isGenerator(bigint x) {
+vector<bigint> getFactors(bigint n) {
+    vector<bigint> factors;
+    bigint curr = 2;
+    while(n > 1) {
+        if(!(n % curr)) {
+            factors.push_back(curr);
+            while(!(n % curr)) n /= curr;
+        }
+        curr++;
+    }
+    return factors;
+}
+
+bool isGenerator(bigint g, bigint p, vector<bigint> &factors) {
+    for(auto &it : factors) {
+        if(CryptoPP::ModularExponentiation(g, (p-1)/it, p) == 1) return false;
+    }
     return true;
 }
 
+void findGenerators(int bits) {
+    for(int i=0; i<3; i++) {
+        bigint p = getPrime(bits), g;
+        vector<bigint> factors = getFactors(p - 1);
+
+        while(1) {
+            g = getRandomInRange(2, p-1);
+            if(isGenerator(g, p, factors)) break;
+        }
+        cout << "¡Iteration " << i+1 << "!" << endl;
+        cout << "g = " << g << " for Z*_{" << p << "}" << endl << endl;
+    }
+}
 
 int main() {
     int opc, bits;
@@ -50,7 +79,7 @@ int main() {
         cout << "* * * PRIME NUMBERS AND GENERATORS * * *" << endl;
         cout << "[1] Random prime number with n bits." << endl;
         cout << "[2] RSA." << endl;
-        cout << "[3] Generators: " << endl;
+        cout << "[3] Generators. " << endl;
         cout << "Select an option: ";
         cin >> opc;
         cout << endl;
@@ -72,9 +101,7 @@ int main() {
             case 3: {
                     cout << "Enter number of bits for primes: ";
                     cin >> bits;
-                    bigint a = getPrime(bits), b = getPrime(bits), c = getPrime(bits);
-
-
+                    findGenerators(bits);
                 }
                 break;
             default:
