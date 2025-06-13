@@ -1,8 +1,6 @@
 #include <iostream>
 #include "tripleDES.h"
 #include "Base64DecoderEncoder.h"
-#include <iostream>
-#include <vector>
 #include <fstream>  // librería para manipular archivos
 
 using namespace std;
@@ -56,6 +54,3 @@ int main() {
 
     return 0;
 }
-
-
-

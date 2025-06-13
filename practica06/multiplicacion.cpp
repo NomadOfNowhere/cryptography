@@ -101,6 +101,12 @@ int main() {
         res ^= dp[i];
     }
 
+    cout << endl;
+    cout << "Datos: ";
+    cout << "p(x): " << showPolynomialBase(p, end) << endl;
+    cout << "q(x): " << showPolynomialBase(q, end) << endl;
+    cout << "m(x): " << showPolynomialBase(m, end+1) << endl;
+
     cout << "\nEl resultado de p(x)·q(x) mod m(x) en GF(2^" << n << ") es: " << endl;
     cout << "Base polinomial:     " << showPolynomialBase(res, end) << endl;
     cout << "Base binaria:        0b " << showBinBase(res, end) << endl;

@@ -2,16 +2,7 @@
 #include <fstream>
 #include "Base64DecoderEncoder.h"
 #include "tripleDES.h"
-#include <cryptopp/des.h>
-#include <cryptopp/cryptlib.h> 
-#include <cryptopp/integer.h>
-#include <cryptopp/osrng.h>
-#include <cryptopp/base64.h>
-#include <cryptopp/files.h>
-#include <cryptopp/hex.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/pkcspad.h>
-#include <cryptopp/padlkrng.h>
+
 using namespace std;
 
 // Función para generar una clave 3DES segura y codificarla en Base64
@@ -32,7 +23,6 @@ string get3DESRandomKey() {
     // Codificar la clave 3DES a Base64
     return base64Encode(stringKey);    
 }
-
 
 void tripleDESEncryptFile(string keyBase64) {
     string key = base64Decode(keyBase64), filename, plainText;
@@ -123,7 +113,7 @@ void tripleDESDecryptFile(string keyBase64) {
     CryptoPP::CBC_Mode<CryptoPP::DES_EDE3>::Decryption decryptor;
     decryptor.SetKeyWithIV((const CryptoPP::byte*)key.data(), key.size(), iv);
 
-    // Cifrar texto
+    // Descifrar texto
     string text;
     CryptoPP::StringSource(cipherText, true,
                      new CryptoPP::StreamTransformationFilter(decryptor,
